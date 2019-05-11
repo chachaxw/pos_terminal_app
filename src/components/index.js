@@ -1,21 +1,26 @@
-import React, { Component } from 'react';
-import { Text } from 'react-native';
-import { Scene, Router } from 'react-native-router-flux';
+/**
+ * @format
+ * @flow
+ */
 
-export default class Main extends Component {
-  render() {
-    return (
-      <Router>
-        <Scene key="root">
-          <Scene
-            hideNavBar
-            initial={true}
-            key="mainScreen"
-            animation='fade'
-            component={() => <Text>Hello World</Text>}
-          />
-        </Scene>
-      </Router>
-    );
-  }
+import React from 'react';
+import { Scene, Router } from 'react-native-router-flux';
+import MainScreen from './Main';
+
+type Props = {};
+
+export default function(props: Props) {
+  return (
+    <Router>
+      <Scene key="root">
+        <Scene
+          hideNavBar
+          initial={true}
+          key="mainScreen"
+          animation='fade'
+          component={MainScreen}
+        />
+      </Scene>
+    </Router>
+  );
 }

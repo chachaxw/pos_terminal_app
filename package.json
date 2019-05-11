@@ -12,6 +12,7 @@
     "axios": "^0.18.0",
     "react": "16.8.3",
     "react-native": "0.59.8",
+    "react-native-material-kit": "^0.5.1",
     "react-native-router-flux": "^4.0.6",
     "react-redux": "^7.0.3",
     "redux": "^4.0.1",
