@@ -1,19 +1,27 @@
 {
-  "name": "PosTerminal",
+  "name": "pos-terminal",
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "flow": "flow",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.4.0",
+    "axios": "^0.18.0",
     "react": "16.8.3",
-    "react-native": "0.59.8"
+    "react-native": "0.59.8",
+    "react-native-router-flux": "^4.0.6",
+    "react-redux": "^7.0.3",
+    "redux": "^4.0.1",
+    "redux-persist": "^5.10.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",
     "@babel/runtime": "^7.4.4",
     "babel-jest": "^24.8.0",
+    "flow-bin": "^0.98.1",
     "jest": "^24.8.0",
     "metro-react-native-babel-preset": "^0.54.0",
     "react-test-renderer": "16.8.3"
