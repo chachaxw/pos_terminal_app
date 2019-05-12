@@ -8,6 +8,7 @@ import { Scene, Router, Drawer } from 'react-native-router-flux';
 
 import MainScreen from './Main';
 import SideMenu from './Main/SideMenu';
+import Register from './Register';
 
 type Props = {};
 
@@ -15,7 +16,7 @@ export default function(props: Props) {
   return (
     <Router>
       <Scene key="root">
-        <Drawer
+        {/* <Drawer
           hideNavBar
           key="SideMenu"
           drawerWidth={240}
@@ -23,7 +24,8 @@ export default function(props: Props) {
           contentComponent={SideMenu}
         >
           <Scene key="MainScreen" hideNavBar component={MainScreen}/>
-        </Drawer>
+        </Drawer> */}
+        <Scene key="Register" initial hideNavBar component={Register} />
       </Scene>
     </Router>
   );
