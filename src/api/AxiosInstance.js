@@ -1,9 +1,8 @@
 import axios from 'axios';
 import qs from 'qs';
+import { apiKey, publicKey } from './config';
 
 const host = 'https://api.authy.com';
-const apiKey = 'md624cf37-9250-4318-8c3e-6eb1149be40f';
-const publicKey = 'm5iVR+lBgCfpSPsagLvFU0vRK2IElEiMko51a95zIB0=';
 
 // axios config options
 const options = {
@@ -12,7 +11,8 @@ const options = {
   retry: 3,
   retryDelay: 1000,
   headers: {
-    Authorization: serverEnv.token,
+    api_key: apiKey,
+    public_key: publicKey,
   },
   // 查询对象序列化函数
   paramsSerializer: (params) => qs.stringify(params),
