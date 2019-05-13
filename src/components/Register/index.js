@@ -27,7 +27,11 @@ export default function(props: Props) {
           <Text style={styles.title}>Register Account</Text>
         </View>
         <View>
-          <TextField />
+          <TextField placeholder="Company Name" />
+          <TextField placeholder="Email" />
+          <TextField placeholder="Address" />
+          <TextField placeholder="Country" />
+          <TextField placeholder="Phone Number" />
           <TouchableOpacity
             onPress={submit}
             activeOpacity={0.8}
@@ -59,7 +63,7 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     height: 44,
-    marginTop: 16,
+    marginTop: 32,
     marginBottom: 16,
     borderRadius: 2,
     alignItems: 'center',
@@ -82,9 +86,8 @@ const styles = StyleSheet.create({
 });
 
 const TextField = MKTextField.textfieldWithFloatingLabel()
-  .withPlaceholder('Company Name')
   .withStyle(styles.textField)
   .withTextInputStyle({flex: 1})
-  .withHighlightColor(MKColor.Teal)
+  .withHighlightColor('#00D7C6')
   .withFloatingLabelFont({ fontSize: 14 })
   .build();
