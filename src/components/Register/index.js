@@ -5,14 +5,17 @@
 
 import React, { useState } from 'react';
 import { ScrollView, SafeAreaView, View, Image, Text,
-  StyleSheet, TouchableOpacity } from 'react-native';
-import { Actions } from 'react-native-router-flux';
+  StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import AwesomeAlert from 'react-native-awesome-alerts';
+import { Actions, ActionConst } from 'react-native-router-flux';
 import { MKTextField } from 'react-native-material-kit';
 import PhoneInput from 'react-native-phone-input'
 import { ApiService } from '../../api/ApiService';
 import { apiKey } from '../../api/config';
+import { emailValidation } from '../../utils/utils';
 
 const logo = require('../../images/logo.png');
+const { height } = Dimensions.get('window');
 
 type Props = {};
 
@@ -21,34 +24,85 @@ export default function(props: Props) {
   const [name, setName] = useState(null);
   const [email, setEmail] = useState(null);
   const [address, setAddress] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [errMsg, setErrMsg] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const submit = async () => {
-    console.log('Submit', this.phone);
-    const code = this.phone.state.formattedNumber;
+    const value = this.phone.getValue();
+    const code = this.phone.getCountryCode();
     const data = {
       api_key: apiKey,
       phone_number: value,
       phone_country: code,
     };
-    try {
-      console.log(data);
-      const res = await new ApiService().postVerification(data);
-      console.log(res);
-    } catch (error) {
-      
+    const params = {
+      country_code: code,
+      phone_number: value,
+      via: 'sms',
     }
-  };
 
-  const selectCountry = (country) => {
-    // const code = this.phone.selectCountry(country);
-    const code = this.phone.state.formattedNumber;
-    setCountryCode(code);
-    console.log(this.phone);
+    if (!name || (name && name.trim() === '')) {
+      setShowAlert(true);
+      setErrMsg('Please input company name!');
+      return;
+    }
+
+    if (!email || !emailValidation(email)) {
+      setShowAlert(true);
+      setErrMsg('Please input right email!');
+      return;
+    }
+
+    if (!this.phone.isValidNumber()) {
+      setShowAlert(true);
+      setErrMsg('Please input right phone number!');
+      return;
+    }
+
+    if (!address || (address && address.trim() === '')) {
+      setShowAlert(true);
+      setErrMsg('Please input address!');
+      return;
+    }
+
+    try {
+      setErrMsg('Loading...');
+      setLoading(true);
+      setShowAlert(true);
+      const res = await new ApiService().postVerification(data, params);
+      setLoading(false);
+      setShowAlert(false);
+
+      if (res) {
+        const { body } = res;
+        Actions.VerifyCode({
+          type: ActionConst.PUSH,
+          body: {
+            display_name: name,
+            country_code: code,
+            phone_number: value,
+            otp_code: body.otp_code,
+            data: {
+              name,
+              email,
+              address,
+              phone: value,
+            },
+          },
+        });
+      }
+      console.log('返回数据', res);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      setShowAlert(false);
+    }
   };
 
   return (
     <ScrollView style={{backgroundColor: '#fff'}}>
-      <SafeAreaView style={{margin: 16}}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.logoView}>
           <Image style={styles.logo} source={logo}/>
           <Text style={styles.title}>Register Account</Text>
@@ -83,18 +137,33 @@ export default function(props: Props) {
           </TouchableOpacity>
         </View>
       </SafeAreaView>
+      <AwesomeAlert
+        show={showAlert}
+        message={errMsg}
+        showProgress={loading}
+        overlayStyle={styles.overlay}
+        messageStyle={{color: '#fff'}}
+        closeOnTouchOutside={!loading}
+        closeOnHardwareBackPress={false}
+        contentContainerStyle={styles.alertStyle}
+        onDismiss={() => setShowAlert(false)}
+      />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    height,
+    margin: 16,
+  },
   logo: {
     width: 60,
     height: 67,
     marginTop: 16,
   },
   logoView: {
-    flex: 1,
+    marginTop: 50,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -131,7 +200,14 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     borderBottomWidth: 2,
     borderColor: '#E0E0E0',
-  }
+  },
+  overlay: {
+    backgroundColor: 'rgba(0,0,0,0)',
+  },
+  alertStyle: {
+    borderRadius: 2,
+    backgroundColor: '#000',
+  },
 });
 
 const TextField = MKTextField.textfieldWithFloatingLabel()

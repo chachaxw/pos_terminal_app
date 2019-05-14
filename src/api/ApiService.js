@@ -3,8 +3,9 @@ import { apiUrl, authKey, authHost } from './config';
 
 export class ApiService {
 
-  postVerification(params) {
-    return AxiosInstance.post(apiUrl.verification, params, {
+  postVerification(data, params) {
+    return AxiosInstance.post(apiUrl.verification, data, {
+      params,
       baseURL: authHost,
       headers: {
         'X-Authy-API-Key': authKey,
@@ -12,8 +13,8 @@ export class ApiService {
     });
   }
 
-  postProfile(params) {
-    return AxiosInstance.post(apiUrl.profile, params);
+  postProfile(data) {
+    return AxiosInstance.post(apiUrl.profile, data);
   }
 
 }

@@ -10,6 +10,7 @@ import MainScreen from './Main';
 import SideMenu from './Main/SideMenu';
 import Register from './Register';
 import Receipt from './Receipt';
+import VerifyCode from './Register/VerifyCode';
 
 type Props = {};
 
@@ -17,13 +18,19 @@ export default function(props: Props) {
   return (
     <Router>
       <Scene key="root">
-        <Scene
+        {/* <Scene
           key="Register"
           initial
           hideNavBar
           component={Register}
+        /> */}
+        <Scene
+          key="VerifyCode"
+          initial
+          hideNavBar
+          component={VerifyCode}
         />
-        {/* <Drawer
+        <Drawer
           hideNavBar
           key="SideMenu"
           drawerWidth={240}
@@ -31,13 +38,12 @@ export default function(props: Props) {
           contentComponent={SideMenu}
         >
           <Scene key="MainScreen" hideNavBar component={MainScreen}/>
-        </Drawer> */}
-        {/* <Scene
+        </Drawer>
+        <Scene
           key="Receipt"
-          initial
           component={Receipt}
           title="Receipt"
-        /> */}
+        />
       </Scene>
     </Router>
   );
