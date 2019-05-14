@@ -1,10 +1,11 @@
 import AxiosInstance from './AxiosInstance';
-import { apiUrl, authKey } from './config';
+import { apiUrl, authKey, authHost } from './config';
 
-class ApiService {
+export class ApiService {
 
   postVerification(params) {
     return AxiosInstance.post(apiUrl.verification, params, {
+      baseURL: authHost,
       headers: {
         'X-Authy-API-Key': authKey,
       }

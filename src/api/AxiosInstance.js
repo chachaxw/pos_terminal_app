@@ -1,12 +1,10 @@
 import axios from 'axios';
 import qs from 'qs';
-import { apiKey, publicKey } from './config';
-
-const host = 'https://api.authy.com';
+import { apiKey, publicKey, baseUrl } from './config';
 
 // axios config options
 const options = {
-  baseURL: host + '/api',
+  baseURL: baseUrl,
   timeout: 10000,
   retry: 3,
   retryDelay: 1000,
