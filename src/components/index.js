@@ -20,7 +20,7 @@ type Props = {
 function Main(props: Props) {
   const { isAuthenticated } = props;
 
-  if (!isAuthenticated) {
+  if (isAuthenticated) {
     return (
       <Router>
         <Scene key="root">
@@ -44,7 +44,7 @@ function Main(props: Props) {
     <Router>
       <Scene key="root">
         <Drawer
-          initial
+          // initial
           hideNavBar
           key="SideMenu"
           drawerWidth={240}
@@ -54,9 +54,10 @@ function Main(props: Props) {
           <Scene key="MainScreen" hideNavBar component={MainScreen}/>
         </Drawer>
         <Scene
+          initial
           key="Receipt"
-          component={Receipt}
           title="Receipt"
+          component={Receipt}
         />
       </Scene>
     </Router>
