@@ -18,15 +18,14 @@ export default function(props: Props) {
   return (
     <Router>
       <Scene key="root">
-        {/* <Scene
+        <Scene
           key="Register"
           initial
           hideNavBar
           component={Register}
-        /> */}
+        />
         <Scene
           key="VerifyCode"
-          initial
           hideNavBar
           component={VerifyCode}
         />

@@ -21,7 +21,7 @@ type Props = {
 export default function(props: Props) {
   const { body } = props;
   const [code, setCode] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   console.log('参数', body);
   const checkCode = async () => {
     if (!body || code !== body.otp_code) {
@@ -30,7 +30,9 @@ export default function(props: Props) {
     }
 
     try {
+      setLoading(true);
       const res = await new ApiService().postProfile(body);
+      setLoading(false);
       if (res) {
         Actions.MainScreen({
           type: ActionConst.PUSH,
@@ -38,6 +40,7 @@ export default function(props: Props) {
       }
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   }
 
@@ -58,13 +61,6 @@ export default function(props: Props) {
           cellStyleFocused={styles.cellStyleFocused}
         />
       </View>
-      {/* <TouchableOpacity
-        onPress={submit}
-        activeOpacity={0.8}
-        style={styles.submitButton}
-      >
-        <Text style={styles.buttonText}>Verify</Text>
-      </TouchableOpacity> */}
       <AwesomeAlert
         show={loading}
         showProgress={true}
@@ -83,6 +79,7 @@ export default function(props: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   logo: {
     width: 60,

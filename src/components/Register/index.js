@@ -146,27 +146,31 @@ export default function(props: Props) {
             placeholder="Email"
             onTextChange={(value) => setEmail(value)}
           />
-          <View style={{flexDirection: 'row'}}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <TextField
               text={country}
               placeholder="Country"
+              style={styles.textFieldHalf}
               onTextChange={(value) => setCountry(value)}
             />
             <TextField
               text={city}
               placeholder="City"
+              style={styles.textFieldHalf}
               onTextChange={(value) => setCity(value)}
             />
           </View>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <TextField
               text={stateName}
               placeholder="State"
+              style={styles.textFieldHalf}
               onTextChange={(value) => setStateName(value)}
             />
             <TextField
               text={postCode}
               placeholder="Post Code"
+              style={styles.textFieldHalf}
               onTextChange={(value) => setPostCode(value)}
             />
           </View>
@@ -244,6 +248,11 @@ const styles = StyleSheet.create({
   },
   textField: {
     height: 48,  // have to do it on iOS
+    marginTop: 16,
+  },
+  textFieldHalf: {
+    flex: 1,
+    height: 48,
     marginTop: 16,
   },
   phoneInput: {
