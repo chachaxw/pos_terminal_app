@@ -23,6 +23,10 @@ export default function(props: Props) {
 
   const [name, setName] = useState(null);
   const [email, setEmail] = useState(null);
+  const [country, setCountry] = useState(null);
+  const [city, setCity] = useState(null);
+  const [stateName, setStateName] = useState(null);
+  const [postCode, setPostCode] = useState(null);
   const [address, setAddress] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [errMsg, setErrMsg] = useState(null);
@@ -54,15 +58,39 @@ export default function(props: Props) {
       return;
     }
 
-    if (!this.phone.isValidNumber()) {
+    if (!country || (country && country.trim() === '')) {
       setShowAlert(true);
-      setErrMsg('Please input right phone number!');
+      setErrMsg('Please input country!');
+      return;
+    }
+
+    if (!city || (city && city.trim() === '')) {
+      setShowAlert(true);
+      setErrMsg('Please input city!');
+      return;
+    }
+
+    if (!stateName || (stateName && stateName.trim() === '')) {
+      setShowAlert(true);
+      setErrMsg('Please input state!');
+      return;
+    }
+
+    if (!postCode || (postCode && postCode.trim() === '')) {
+      setShowAlert(true);
+      setErrMsg('Please input postCode!');
       return;
     }
 
     if (!address || (address && address.trim() === '')) {
       setShowAlert(true);
       setErrMsg('Please input address!');
+      return;
+    }
+
+    if (!this.phone.isValidNumber()) {
+      setShowAlert(true);
+      setErrMsg('Please input right phone number!');
       return;
     }
 
@@ -118,15 +146,39 @@ export default function(props: Props) {
             placeholder="Email"
             onTextChange={(value) => setEmail(value)}
           />
-          <PhoneInput
-            initialCountry="cn"
-            ref={(ref) => this.phone = ref}
-            style={styles.phoneInput}
-          />
+          <View style={{flexDirection: 'row'}}>
+            <TextField
+              text={country}
+              placeholder="Country"
+              onTextChange={(value) => setCountry(value)}
+            />
+            <TextField
+              text={city}
+              placeholder="City"
+              onTextChange={(value) => setCity(value)}
+            />
+          </View>
+          <View style={{flexDirection: 'row'}}>
+            <TextField
+              text={stateName}
+              placeholder="State"
+              onTextChange={(value) => setStateName(value)}
+            />
+            <TextField
+              text={postCode}
+              placeholder="Post Code"
+              onTextChange={(value) => setPostCode(value)}
+            />
+          </View>
           <TextField
             text={address}
             placeholder="Address"
             onTextChange={(value) => setAddress(value)}
+          />
+          <PhoneInput
+            initialCountry="cn"
+            ref={(ref) => this.phone = ref}
+            style={styles.phoneInput}
           />
           <TouchableOpacity
             onPress={submit}
