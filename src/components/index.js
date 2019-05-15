@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { connect } from 'react-redux';
 import { Scene, Router, Drawer } from 'react-native-router-flux';
 
 import MainScreen from './Main';
@@ -12,24 +13,38 @@ import Register from './Register';
 import Receipt from './Receipt';
 import VerifyCode from './Register/VerifyCode';
 
-type Props = {};
+type Props = {
+  isAuthenticated: bool,
+};
 
-export default function(props: Props) {
+function Main(props: Props) {
+  const { isAuthenticated } = props;
+
+  if (!isAuthenticated) {
+    return (
+      <Router>
+        <Scene key="root">
+          <Scene
+            initial
+            key="Register"
+            hideNavBar
+            component={Register}
+          />
+          <Scene
+            key="VerifyCode"
+            hideNavBar
+            component={VerifyCode}
+          />
+        </Scene>
+      </Router>
+    );
+  }
+
   return (
     <Router>
       <Scene key="root">
-        <Scene
-          key="Register"
-          initial
-          hideNavBar
-          component={Register}
-        />
-        <Scene
-          key="VerifyCode"
-          hideNavBar
-          component={VerifyCode}
-        />
         <Drawer
+          initial
           hideNavBar
           key="SideMenu"
           drawerWidth={240}
@@ -47,3 +62,12 @@ export default function(props: Props) {
     </Router>
   );
 }
+
+function mapStateToProps(state) {
+  console.log(state);
+	return {
+		isAuthenticated: state.global.isAuthenticated,
+	};
+}
+
+export default connect(mapStateToProps)(Main);

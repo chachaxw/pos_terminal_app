@@ -6,13 +6,13 @@
 import React, { useState } from 'react';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { Actions, ActionConst } from 'react-native-router-flux';
-import { View, Text, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 
 import { ApiService } from '../../api/ApiService';
+import { authorizeAction } from '../../actions';
 
 const logo = require('../../images/logo.png');
-const { height } = Dimensions.get('window');
 
 type Props = {
   body: object,
@@ -22,7 +22,9 @@ export default function(props: Props) {
   const { body } = props;
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
+
   console.log('参数', body);
+
   const checkCode = async () => {
     if (!body || code !== body.otp_code) {
       this.pinInput.shake().then(() => setCode(''));
@@ -39,7 +41,6 @@ export default function(props: Props) {
         });
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   }
