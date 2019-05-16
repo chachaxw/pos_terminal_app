@@ -57,7 +57,7 @@ export default function(props: Props) {
   }
 
   return (
-    <ScrollView style={{backgroundColor: '#fff'}}>
+    <ScrollView style={{backgroundColor: '#fafafa'}}>
       <SafeAreaView style={{margin: 16}}>
         <View style={styles.receipt}>
           <View style={Object.assign({}, styles.rowItem, {alignItems: 'baseline'})}>

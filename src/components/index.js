@@ -11,6 +11,7 @@ import MainScreen from './Main';
 import SideMenu from './Main/SideMenu';
 import Register from './Register';
 import Receipt from './Receipt';
+import Charge from './Charge';
 import VerifyCode from './Register/VerifyCode';
 
 type Props = {
@@ -54,10 +55,17 @@ function Main(props: Props) {
           <Scene key="MainScreen" hideNavBar component={MainScreen}/>
         </Drawer>
         <Scene
-          initial
+          back
           key="Receipt"
           title="Receipt"
           component={Receipt}
+        />
+        <Scene
+          back
+          initial
+          key="Charge"
+          title="Charge"
+          component={Charge}
         />
       </Scene>
     </Router>
