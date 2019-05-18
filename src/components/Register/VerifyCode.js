@@ -5,9 +5,8 @@
 
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import Toast from 'react-native-root-toast';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import { Actions, ActionConst } from 'react-native-router-flux';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 
@@ -21,30 +20,36 @@ type Props = {
 };
 
 function VerifyCode(props: Props) {
-  const { body } = props;
+  let { body } = props;
+  const codeLength = 4;
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
-
-  console.log('参数', body);
-
-  const checkCode = async () => {
-    if (!body || code.length != 4) {
-      this.pinInput.shake().then(() => setCode(''));
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const res = await new ApiService().postProfile(body);
-      setLoading(false);
-      if (res) {
-        authorize();
-        Actions.MainScreen({
-          type: ActionConst.PUSH,
+  const checkCode = async (value) => {
+    console.log('Check Code', value);
+    if (value.length === codeLength) {
+      body = {
+        ...body,
+        otp_code: value,
+      };
+  
+      try {
+        console.log('Request body', body);
+        setLoading(true);
+        const res = await new ApiService().postProfile(body);
+        setLoading(false);
+        console.log('VerifyCode response', res);
+  
+        if (res) {
+          authorize();
+        }
+      } catch (err) {
+        console.log(err.response);
+        setLoading(false);
+        Toast.show(err.message, {
+          duration: Toast.durations.LONG,
+          position: 0,
         });
       }
-    } catch (error) {
-      setLoading(false);
     }
   }
 
@@ -52,16 +57,17 @@ function VerifyCode(props: Props) {
     <View style={styles.container}>
       <View style={styles.logoView}>
         <Image style={styles.logo} source={logo}/>
-        <Text style={styles.title}>Verify OPT Code</Text>
+        <Text style={styles.title}>Verify OTP Code</Text>
       </View>
       <View style={{alignItems: 'center', marginTop: 100}}>
         <SmoothPinCodeInput
           value={code}
           cellSpacing={20}
+          onFulfill={checkCode}
+          codeLength={codeLength}
+          cellStyle={styles.cellStyle}
           ref={(ref) => this.pinInput = ref}
           onTextChange={code => setCode(code)}
-          onFulfill={checkCode}
-          cellStyle={styles.cellStyle}
           cellStyleFocused={styles.cellStyleFocused}
         />
       </View>

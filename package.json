@@ -17,6 +17,7 @@
     "react-native-device-info": "^2.0.0",
     "react-native-material-kit": "^0.5.1",
     "react-native-phone-input": "^0.2.1",
+    "react-native-root-toast": "^3.0.2",
     "react-native-router-flux": "^4.0.6",
     "react-native-secure-key-store": "^2.0.2",
     "react-native-smooth-pincode-input": "^1.0.3",

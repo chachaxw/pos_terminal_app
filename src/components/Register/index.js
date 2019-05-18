@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { ScrollView, SafeAreaView, View, Image, Text,
   StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import Toast from 'react-native-root-toast';
 import DeviceInfo from 'react-native-device-info';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { MKTextField } from 'react-native-material-kit';
@@ -18,6 +19,11 @@ import { emailValidation } from '../../utils/utils';
 const logo = require('../../images/logo.png');
 const { height } = Dimensions.get('window');
 const uuid = DeviceInfo.getUniqueID();
+const toastOptions = {
+  duration: Toast.durations.LONG,
+  position: Toast.positions.TOP,
+  shadow: false,
+};
 
 type Props = {};
 
@@ -31,10 +37,9 @@ export default function(props: Props) {
   const [address, setAddress] = useState('JianYe');
   const [showAlert, setShowAlert] = useState(false);
   const [errMsg, setErrMsg] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   const submit = async () => {
-    const value = this.phone.getValue();
+    const value = this.phone.getValue().replace(`+${code}`, '');
     const code = this.phone.getCountryCode();
     const data = {
       api_key: apiKey,
@@ -43,64 +48,54 @@ export default function(props: Props) {
     };
     const params = {
       country_code: code,
-      phone_number: value.replace(`+${code}`, ''),
+      phone_number: value,
       via: 'sms',
     }
 
     if (!name || (name && name.trim() === '')) {
-      setShowAlert(true);
-      setErrMsg('Please input company name!');
+      Toast.show('Please input company name!', toastOptions);
       return;
     }
 
     if (!email || !emailValidation(email)) {
-      setShowAlert(true);
-      setErrMsg('Please input right email!');
+      Toast.show('Please input email!', toastOptions);
       return;
     }
 
     if (!country || (country && country.trim() === '')) {
-      setShowAlert(true);
-      setErrMsg('Please input country!');
+      Toast.show('Please input country!', toastOptions);
       return;
     }
 
     if (!city || (city && city.trim() === '')) {
-      setShowAlert(true);
-      setErrMsg('Please input city!');
+      Toast.show('Please input city!', toastOptions);
       return;
     }
 
     if (!stateName || (stateName && stateName.trim() === '')) {
-      setShowAlert(true);
-      setErrMsg('Please input state!');
+      Toast.show('Please input state!', toastOptions);
       return;
     }
 
     if (!postCode || (postCode && postCode.trim() === '')) {
-      setShowAlert(true);
-      setErrMsg('Please input postCode!');
+      Toast.show('Please input postCode!', toastOptions);
       return;
     }
 
     if (!address || (address && address.trim() === '')) {
-      setShowAlert(true);
-      setErrMsg('Please input address!');
+      Toast.show('Please input address!', toastOptions);
       return;
     }
 
     if (!this.phone.isValidNumber()) {
-      setShowAlert(true);
-      setErrMsg('Please input right phone number!');
+      Toast.show('Please input right phone number!', toastOptions);
       return;
     }
 
     try {
       setErrMsg('Loading...');
-      setLoading(true);
       setShowAlert(true);
       const res = await new ApiService().postVerification(data, params);
-      setLoading(false);
       setShowAlert(false);
 
       if (res) {
@@ -121,10 +116,10 @@ export default function(props: Props) {
           },
         });
       }
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
+    } catch (err) {
+      console.log(err);
       setShowAlert(false);
+      Toast.show(err.message, toastOptions);
     }
   };
 
@@ -196,10 +191,10 @@ export default function(props: Props) {
       <AwesomeAlert
         show={showAlert}
         message={errMsg}
-        showProgress={loading}
+        showProgress={true}
         overlayStyle={styles.overlay}
         messageStyle={{color: '#fff'}}
-        closeOnTouchOutside={!loading}
+        closeOnTouchOutside={false}
         closeOnHardwareBackPress={false}
         contentContainerStyle={styles.alertStyle}
         onDismiss={() => setShowAlert(false)}

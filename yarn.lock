@@ -5105,6 +5105,22 @@ react-native-phone-input@^0.2.1:
     lodash "^4.17.4"
     prop-types "^15.5.10"
 
+react-native-root-siblings@^3.0.0:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-root-siblings/-/react-native-root-siblings-3.2.1.tgz#06bd8722babe8a30e914b73eae4beffa3218ec57"
+  integrity sha512-WNNhLRFpyK8R00OOdMhQVepeBV+khMTi+Yk3QcPRetMLvao8kLkCP5SObiXpbTFPZlkuSfHo/0jtEKyUA8qWpw==
+  dependencies:
+    prop-types "^15.6.2"
+    static-container "^1.0.0"
+
+react-native-root-toast@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-root-toast/-/react-native-root-toast-3.0.2.tgz#85c0c50d300c895a35ea98587b4ad4c9540297ee"
+  integrity sha512-I3yJkfFP7yEBRBiJAToQgPtxZwf+8j60KDPN3nOYSg9Nfqldq6VwIC4Pgq6Wt8XgqpSuIBtwGYfpc5JS8TxFeg==
+  dependencies:
+    prop-types "^15.5.10"
+    react-native-root-siblings "^3.0.0"
+
 react-native-router-flux@^4.0.6:
   version "4.0.6"
   resolved "https://registry.yarnpkg.com/react-native-router-flux/-/react-native-router-flux-4.0.6.tgz#e4723f5ce89cb5822e0c9bb6d0a8d4de6179eb58"
@@ -5951,6 +5967,11 @@ stacktrace-parser@^0.1.3:
   integrity sha512-wXhu0Z8YgCGigUtHQq+J7pjXCppk3Um5DwH4qskOKHMlJmKwuuUSm+wDAgU7t4sbVjvuDTNGwOfFKgjMEqSflA==
   dependencies:
     type-fest "^0.3.0"
+
+static-container@^1.0.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/static-container/-/static-container-1.3.0.tgz#e4f7b4be4e42954e3d1955ab7b3974a78b7bad87"
+  integrity sha512-OJnvgv6tq9T5QbFUMioEK4WP48pMn/X4qdcrWAhop6boMMz6pMmWPWXgjimn1wKqcClZ6Ff0iSKViRXzwx111w==
 
 static-extend@^0.1.1:
   version "0.1.2"
