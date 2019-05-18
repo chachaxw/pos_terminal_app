@@ -4,13 +4,15 @@
  */
 
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 
 import { ApiService } from '../../api/ApiService';
-import { authorizeAction } from '../../actions';
+import { AUTHORIZE } from '../../actions';
 
 const logo = require('../../images/logo.png');
 
@@ -18,7 +20,7 @@ type Props = {
   body: object,
 };
 
-export default function(props: Props) {
+function VerifyCode(props: Props) {
   const { body } = props;
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
@@ -26,7 +28,7 @@ export default function(props: Props) {
   console.log('参数', body);
 
   const checkCode = async () => {
-    if (!body || code !== body.otp_code) {
+    if (!body || code.length != 4) {
       this.pinInput.shake().then(() => setCode(''));
       return;
     }
@@ -36,6 +38,7 @@ export default function(props: Props) {
       const res = await new ApiService().postProfile(body);
       setLoading(false);
       if (res) {
+        authorize();
         Actions.MainScreen({
           type: ActionConst.PUSH,
         });
@@ -76,6 +79,19 @@ export default function(props: Props) {
     </View>
   );
 }
+
+function mapDispatchToProps(dispatch) {
+	return {
+		authorize: () => {
+      dispatch({
+        type: AUTHORIZE,
+        isAuthenticated: true,
+      });
+    },
+	};
+}
+
+export default connect(mapDispatchToProps)(VerifyCode);
 
 const styles = StyleSheet.create({
   container: {

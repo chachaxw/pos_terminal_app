@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { ScrollView, SafeAreaView, View, Image, Text,
   StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import DeviceInfo from 'react-native-device-info';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { MKTextField } from 'react-native-material-kit';
 import PhoneInput from 'react-native-phone-input'
@@ -16,18 +17,18 @@ import { emailValidation } from '../../utils/utils';
 
 const logo = require('../../images/logo.png');
 const { height } = Dimensions.get('window');
+const uuid = DeviceInfo.getUniqueID();
 
 type Props = {};
 
 export default function(props: Props) {
-
-  const [name, setName] = useState(null);
-  const [email, setEmail] = useState(null);
-  const [country, setCountry] = useState(null);
-  const [city, setCity] = useState(null);
-  const [stateName, setStateName] = useState(null);
-  const [postCode, setPostCode] = useState(null);
-  const [address, setAddress] = useState(null);
+  const [name, setName] = useState('Chacha Chou');
+  const [email, setEmail] = useState('867571123@qq.com');
+  const [country, setCountry] = useState('China');
+  const [city, setCity] = useState('ShenZhen');
+  const [stateName, setStateName] = useState('FuTian');
+  const [postCode, setPostCode] = useState('518000');
+  const [address, setAddress] = useState('JianYe');
   const [showAlert, setShowAlert] = useState(false);
   const [errMsg, setErrMsg] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -42,7 +43,7 @@ export default function(props: Props) {
     };
     const params = {
       country_code: code,
-      phone_number: value,
+      phone_number: value.replace(`+${code}`, ''),
       via: 'sms',
     }
 
@@ -103,14 +104,14 @@ export default function(props: Props) {
       setShowAlert(false);
 
       if (res) {
-        const { body } = res;
+        console.log('Response', res);
         Actions.VerifyCode({
           type: ActionConst.PUSH,
           body: {
             display_name: name,
             country_code: code,
             phone_number: value,
-            otp_code: body.otp_code,
+            device_uuid: uuid,
             data: {
               name,
               email,
@@ -120,7 +121,6 @@ export default function(props: Props) {
           },
         });
       }
-      console.log('返回数据', res);
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -137,24 +137,24 @@ export default function(props: Props) {
         </View>
         <View>
           <TextField
-            text={name}
+            value={name}
             placeholder="Company Name"
             onTextChange={(value) => setName(value)}
           />
           <TextField
-            text={email}
+            value={email}
             placeholder="Email"
             onTextChange={(value) => setEmail(value)}
           />
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <TextField
-              text={country}
+              value={country}
               placeholder="Country"
               style={styles.textFieldHalf}
               onTextChange={(value) => setCountry(value)}
             />
             <TextField
-              text={city}
+              value={city}
               placeholder="City"
               style={styles.textFieldHalf}
               onTextChange={(value) => setCity(value)}
@@ -162,20 +162,20 @@ export default function(props: Props) {
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <TextField
-              text={stateName}
+              value={stateName}
               placeholder="State"
               style={styles.textFieldHalf}
               onTextChange={(value) => setStateName(value)}
             />
             <TextField
-              text={postCode}
+              value={postCode}
               placeholder="Post Code"
               style={styles.textFieldHalf}
               onTextChange={(value) => setPostCode(value)}
             />
           </View>
           <TextField
-            text={address}
+            value={address}
             placeholder="Address"
             onTextChange={(value) => setAddress(value)}
           />
