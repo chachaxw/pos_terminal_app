@@ -4,15 +4,27 @@
  */
 
 import React, { useState } from 'react';
-import { ScrollView, SafeAreaView, View, Image, Text,
-  StyleSheet } from 'react-native';
-import { Actions } from 'react-native-router-flux';
+import { ScrollView, SafeAreaView, View, Text,
+  StyleSheet, TouchableOpacity } from 'react-native';
+import { Actions, ActionConst } from 'react-native-router-flux';
 import { ApiService } from '../../api/ApiService';
 import { MKTextField } from 'react-native-material-kit';
 
 type Customer = {
   name: string,
 }
+
+const customers = [
+  {name: 'Chacha Chou'},
+  {name: 'Chacha Chou'},
+  {name: 'Chacha Chou'},
+  {name: 'Chacha Chou'},
+  {name: 'Chacha Chou'},
+  {name: 'Chacha Chou'},
+  {name: 'Chacha Chou'},
+  {name: 'Chacha Chou'},
+  {name: 'Chacha Chou'},
+];
 
 type Props = {
   customers: Array<Customer>,
@@ -24,8 +36,9 @@ export default function(props: Props) {
   const [firstName, setFirstName] = useState(null);
   const [lastName, setLastName] = useState(null);
 
-  const printReceipt = async () => {
-    console.log('Print Receipt');
+  const select = async (item) => {
+    console.log('Photo Identity', item);
+    Actions.PhotoIdentity({type: ActionConst.PUSH, name: 'Chacha Chou'});
   }
 
   return (
@@ -44,26 +57,21 @@ export default function(props: Props) {
             onTextChange={(value) => setLastName(value)}
           />
         </View>
-        <View style={styles.rowItem}>
-          <Text>Chacha Chou</Text>
-        </View>
-        <View style={styles.rowItem}>
-          <Text>Chacha Chou</Text>
-        </View>
-        <View style={styles.rowItem}>
-          <Text>Chacha Chou</Text>
-        </View>
-        <View style={styles.rowItem}>
-          <Text>Chacha Chou</Text>
-        </View>
-        <View style={styles.rowItem}>
-          <Text>Chacha Chou</Text>
-        </View>
-        <View style={styles.rowItem}>
-          <Text>Chacha Chou</Text>
-        </View>
-        <View style={styles.rowItem}>
-          <Text>Chacha Chou</Text>
+        <View>
+          {customers && customers.length > 0 ?
+            customers.map((item, index) => {
+              return (
+                <TouchableOpacity
+                  key={index}
+                  activeOpacity={0.8}
+                  style={styles.rowItem}
+                  onPress={() => select(item)}
+                >
+                  <Text>{item.name}</Text>
+                </TouchableOpacity>
+              );
+            }) : null
+          }
         </View>
       </SafeAreaView>
     </ScrollView>

@@ -12,6 +12,7 @@ import SideMenu from './Main/SideMenu';
 import Register from './Register';
 import Receipt from './Receipt';
 import Charge from './Charge';
+import PhotoIdentity from './Charge/PhotoIdentity';
 import VerifyCode from './Register/VerifyCode';
 import LoadingModal from './common/LoadingModal';
 
@@ -22,10 +23,10 @@ type Props = {
 function Main(props: Props) {
   const { isAuthenticated } = props;
 
-  if (isAuthenticated) {
+  if (!isAuthenticated) {
     return (
       <Router>
-        <Modal>
+        <Modal hideNavBar>
           <Scene key="root">
             <Scene
               initial
@@ -39,6 +40,10 @@ function Main(props: Props) {
               component={VerifyCode}
             />
           </Scene>
+          <Scene
+            key="LoadingModal"
+            component={LoadingModal}
+          />
         </Modal>
       </Router>
     );
@@ -46,10 +51,10 @@ function Main(props: Props) {
 
   return (
     <Router>
-      <Modal>
+      <Modal hideNavBar>
         <Scene key="root">
           <Drawer
-            // initial
+            initial
             hideNavBar
             key="SideMenu"
             drawerWidth={240}
@@ -66,7 +71,6 @@ function Main(props: Props) {
           />
           <Scene
             back
-            initial
             key="Charge"
             title="Charge"
             component={Charge}
@@ -75,6 +79,10 @@ function Main(props: Props) {
         <Scene
           key="LoadingModal"
           component={LoadingModal}
+        />
+        <Scene
+          key='PhotoIdentity'
+          component={PhotoIdentity}
         />
       </Modal>
     </Router>

@@ -3,9 +3,9 @@
  * @flow
  */
 
-import React, { useState } from 'react';
+import React from 'react';
+import { StyleSheet } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import { Actions, ActionConst } from 'react-native-router-flux';
 
 type Props = {
   message: string,
@@ -27,8 +27,8 @@ export default function(props: Props) {
   return (
     <AwesomeAlert
       show={true}
-      showProgress={true}
       message={message}
+      showProgress={true}
       overlayStyle={styles.overlay}
       closeOnTouchOutside={false}
       messageStyle={{color: '#fff'}}
