@@ -20,9 +20,11 @@ const logo = require('../../images/logo.png');
 const { height } = Dimensions.get('window');
 const uuid = DeviceInfo.getUniqueID();
 const toastOptions = {
-  duration: Toast.durations.LONG,
-  position: Toast.positions.TOP,
+  opacity: 1,
+  position: 0,
   shadow: false,
+  backgroundColor: '#000',
+  duration: Toast.durations.SHORT,
 };
 
 type Props = {};
@@ -93,13 +95,12 @@ export default function(props: Props) {
     }
 
     try {
-      setErrMsg('Loading...');
+      setErrMsg('Registering...');
       setShowAlert(true);
       const res = await new ApiService().postVerification(data, params);
       setShowAlert(false);
 
       if (res) {
-        console.log('Response', res);
         Actions.VerifyCode({
           type: ActionConst.PUSH,
           body: {
@@ -117,9 +118,10 @@ export default function(props: Props) {
         });
       }
     } catch (err) {
-      console.log(err);
       setShowAlert(false);
-      Toast.show(err.message, toastOptions);
+      const res = err.response;
+      const message = res.data.message || err.message;
+      Toast.show(message, toastOptions);
     }
   };
 

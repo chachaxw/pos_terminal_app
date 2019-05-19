@@ -18,6 +18,8 @@ export const tokenApiKey = 'd624cf37-9250-4318-8c3e-6eb1149be40f';
 export const apiUrl = {
   otp: '/otp/obtain',
   token: '/tokens',
+  wallet: '/wallet',
   profile: '/profiles',
+  guests: '/guestlists',
   verification: '/protected/json/phones/verification/start',
 }

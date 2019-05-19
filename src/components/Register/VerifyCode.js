@@ -3,6 +3,7 @@
  * @flow
  */
 
+import nacl from 'tweetnacl';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import Toast from 'react-native-root-toast';
@@ -10,10 +11,18 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 
+import { publicKey } from '../../api/config';
 import { ApiService } from '../../api/ApiService';
 import { AUTHORIZE } from '../../actions';
 
 const logo = require('../../images/logo.png');
+const toastOptions = {
+  opacity: 1,
+  position: 0,
+  shadow: false,
+  backgroundColor: '#000',
+  duration: Toast.durations.SHORT,
+};
 
 type Props = {
   body: object,
@@ -35,20 +44,24 @@ function VerifyCode(props: Props) {
       try {
         console.log('Request body', body);
         setLoading(true);
-        const res = await new ApiService().postProfile(body);
+        // const res = await new ApiService().postProfile(body);
+        const otpRes = await new ApiService().getOtp(body.device_uuid);
         setLoading(false);
         console.log('VerifyCode response', res);
   
-        if (res) {
+        if (otpRes) {
+          const pinCode = otpRes.data.pin_code;
+          const data = nacl.sign.open(pinCode, publicKey);
+          const tokenRes = await new ApiService().getToken(body.device_uuid, data);
+          console.log('Request body', tokenRes);
           authorize();
         }
       } catch (err) {
-        console.log(err.response);
         setLoading(false);
-        Toast.show(err.message, {
-          duration: Toast.durations.LONG,
-          position: 0,
-        });
+        console.log(err.response);
+        const res = err.response;
+        const message = res.data.message || err.message;
+        Toast.show(message, toastOptions);
       }
     }
   }

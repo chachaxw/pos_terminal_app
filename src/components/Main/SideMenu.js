@@ -10,12 +10,14 @@ import { Actions } from 'react-native-router-flux';
 import { MKColor, MKSwitch } from 'react-native-material-kit';
 
 const closeIcon = require('../../images/close.png');
-const avatarUrl = 'http://www.getmdl.io/assets/demos/welcome_card.jpg';
 
-type Props = {};
+type Props = {
+  name: string,
+  avatarUrl: string,
+};
 
 export default function(props: Props) {
-
+  const { name, avatarUrl } = props;
   const [printChecked, setPrintChecked] = useState(true);
   const [saveChecked, setSaveChecked] = useState(true);
   const closeDrawer = () => {
@@ -34,8 +36,11 @@ export default function(props: Props) {
         </TouchableOpacity>
       </View>
       <View style={styles.wrapper}>
-        <Image style={styles.avatar} source={{uri: avatarUrl}}></Image>
-        <View><Text style={styles.username}>Chacha</Text></View>
+        <Image
+          style={styles.avatar}
+          source={{uri: avatarUrl || 'http://www.getmdl.io/assets/demos/welcome_card.jpg'}}>
+        </Image>
+        <View><Text style={styles.username}>{name || 'Chacha'}</Text></View>
         <View style={styles.rowItem}>
           <Text style={styles.rowText}>Print Receipt</Text>
           <MKSwitch

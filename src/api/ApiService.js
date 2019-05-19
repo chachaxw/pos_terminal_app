@@ -27,6 +27,18 @@ export class ApiService {
     });
   }
 
+  getGuests(accessToken: string) {
+    return AxiosInstance.get(apiUrl.guests, {
+      headers: { access_token: accessToken }
+    });
+  }
+
+  getWallet(id: string, accessToken: string) {
+    return AxiosInstance.get(`${apiUrl.wallet}/${id}`, {
+      headers: { access_token: accessToken }
+    });
+  }
+
   postVerification(data: object, params: object) {
     return AxiosInstance.post(apiUrl.verification, data, {
       params,
@@ -40,5 +52,6 @@ export class ApiService {
   postProfile(data: object) {
     return AxiosInstance.post(apiUrl.profile, data);
   }
+  
 
 }
