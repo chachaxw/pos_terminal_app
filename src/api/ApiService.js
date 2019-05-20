@@ -3,8 +3,9 @@
  * @flow
  */
 
+ import qs from 'qs';
 import AxiosInstance from './AxiosInstance';
-import { apiUrl, authKey, authHost, tokenApiKey } from './config';
+import { apiUrl, authKey, authHost, apiKey, publicKey, tokenApiKey } from './config';
 
 export class ApiService {
 
@@ -27,16 +28,12 @@ export class ApiService {
     });
   }
 
-  getGuests(accessToken: string) {
-    return AxiosInstance.get(apiUrl.guests, {
-      headers: { access_token: accessToken }
-    });
+  getGuests() {
+    return AxiosInstance.get(apiUrl.guests);
   }
 
-  getWallet(id: string, accessToken: string) {
-    return AxiosInstance.get(`${apiUrl.wallet}/${id}`, {
-      headers: { access_token: accessToken }
-    });
+  getWallet(id: string) {
+    return AxiosInstance.get(`${apiUrl.wallet}/${id}`);
   }
 
   postVerification(data: object, params: object) {
@@ -54,9 +51,18 @@ export class ApiService {
       headers: {
         api_key: apiKey,
         public_key: publicKey,
+        // headers: {
+        //   'content-type': 'multipart/form-data',
+        // }
       },
     });
   }
-  
 
+  postGuests(id: string, params: object) {
+    return AxiosInstance.post(`${apiUrl.guests}/${id}/register`, params);
+  }
+
+  postTransactions(params: object) {
+    return AxiosInstance.post(`${apiUrl.transactions}`, params);
+  }
 }

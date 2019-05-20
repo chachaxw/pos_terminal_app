@@ -25,16 +25,16 @@ const toastOptions = {
 };
 
 type Props = {
-  body: object,
+  body: any,
+  authorize: () => void,
 };
 
 function VerifyCode(props: Props) {
-  let { body } = props;
+  let { body, authorize } = props;
   const codeLength = 4;
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const checkCode = async (value) => {
-    console.log('Check Code', value);
     if (value.length === codeLength) {
       body = {
         ...body,
@@ -42,25 +42,25 @@ function VerifyCode(props: Props) {
       };
   
       try {
-        console.log('Request body', body);
+        console.log('Request body', JSON.stringify(body));
         setLoading(true);
-        // const res = await new ApiService().postProfile(body);
-        const otpRes = await new ApiService().getOtp(body.device_uuid);
+        const res = await new ApiService().postProfile(body);
+        // const otpRes = await new ApiService().getOtp(body.device_uuid);
         setLoading(false);
         console.log('VerifyCode response', res);
   
-        if (otpRes) {
-          const pinCode = otpRes.data.pin_code;
-          const data = nacl.sign.open(pinCode, publicKey);
-          const tokenRes = await new ApiService().getToken(body.device_uuid, data);
-          console.log('Request body', tokenRes);
+        if (res) {
+          // const pinCode = otpRes.data.pin_code;
+          // const data = nacl.sign.open(pinCode, publicKey);
+          // const tokenRes = await new ApiService().getToken(body.device_uuid, data);
+          // console.log('Request body', tokenRes);
           authorize();
         }
       } catch (err) {
         setLoading(false);
         console.log(err.response);
         const res = err.response;
-        const message = res.data.message || err.message;
+        const message = (res && res.data.message) || err.message;
         Toast.show(message, toastOptions);
       }
     }
@@ -110,7 +110,7 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-export default connect(mapDispatchToProps)(VerifyCode);
+export default connect(null, mapDispatchToProps)(VerifyCode);
 
 const styles = StyleSheet.create({
   container: {

@@ -41,8 +41,8 @@ export default function(props: Props) {
   const [errMsg, setErrMsg] = useState(null);
 
   const submit = async () => {
-    const value = this.phone.getValue().replace(`+${code}`, '');
     const code = this.phone.getCountryCode();
+    const value = this.phone.getValue().replace(`+${code}`, '');
     const data = {
       api_key: apiKey,
       phone_number: value,
@@ -99,7 +99,7 @@ export default function(props: Props) {
       setShowAlert(true);
       const res = await new ApiService().postVerification(data, params);
       setShowAlert(false);
-
+      console.log(res);
       if (res) {
         Actions.VerifyCode({
           type: ActionConst.PUSH,
@@ -120,7 +120,7 @@ export default function(props: Props) {
     } catch (err) {
       setShowAlert(false);
       const res = err.response;
-      const message = res.data.message || err.message;
+      const message = (res && res.data.message) || err.message;
       Toast.show(message, toastOptions);
     }
   };

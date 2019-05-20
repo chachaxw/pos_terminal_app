@@ -21,5 +21,6 @@ export const apiUrl = {
   wallet: '/wallet',
   profile: '/profiles',
   guests: '/guestlists',
+  transactions: '/transactions',
   verification: '/protected/json/phones/verification/start',
 }
