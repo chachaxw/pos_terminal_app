@@ -5,9 +5,10 @@
 
 export const AUTHORIZE = 'AUTHORIZE';
 
-export function authorizeAction(isAuthenticated: bool) {
+export function authorizeAction(accessToken: string, isAuthenticated: bool) {
   return {
     type: AUTHORIZE,
-    iisAuthenticated,
+    accessToken,
+    isAuthenticated,
   }
 }

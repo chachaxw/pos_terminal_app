@@ -8,10 +8,6 @@ const options = {
   timeout: 10000,
   retry: 3,
   retryDelay: 1000,
-  headers: {
-    api_key: apiKey,
-    public_key: publicKey,
-  },
   // 查询对象序列化函数
   paramsSerializer: (params) => qs.stringify(params),
 };
