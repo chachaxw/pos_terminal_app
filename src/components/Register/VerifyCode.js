@@ -10,10 +10,11 @@ import Toast from 'react-native-root-toast';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
+import RNSecureKeyStore, { ACCESSIBLE } from "react-native-secure-key-store";
 
-import { publicKey } from '../../api/config';
 import { ApiService } from '../../api/ApiService';
-import { AUTHORIZE } from '../../actions';
+import AxiosInstance from '../../api/AxiosInstance';
+import { AUTHORIZE, GENERATE_KEY } from '../../actions';
 
 const logo = require('../../images/logo.png');
 const toastOptions = {
@@ -27,33 +28,38 @@ const toastOptions = {
 type Props = {
   body: any,
   authorize: () => void,
+  generateKey: (keyPair: any) => void,
 };
 
 function VerifyCode(props: Props) {
-  let { body, authorize } = props;
+  let { body, authorize, generateKey } = props;
   const codeLength = 4;
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const checkCode = async (value) => {
     if (value.length === codeLength) {
-      body = {
-        ...body,
-        otp_code: value,
+      const keyPair = nacl.sign.keyPair();
+      AxiosInstance.defaults.headers = {
+        api_ey: keyPair.secretKey,
+        public_key: keyPair.publicKey,
       };
+
+      body.append('otp_code', value);
   
       try {
-        console.log('Request body', JSON.stringify(body));
+        console.log('Request body', body, keyPair);
         setLoading(true);
         const res = await new ApiService().postProfile(body);
-        // const otpRes = await new ApiService().getOtp(body.device_uuid);
         setLoading(false);
         console.log('VerifyCode response', res);
   
         if (res) {
+          // const otpRes = await new ApiService().getOtp(body.device_uuid);
           // const pinCode = otpRes.data.pin_code;
           // const data = nacl.sign.open(pinCode, publicKey);
           // const tokenRes = await new ApiService().getToken(body.device_uuid, data);
           // console.log('Request body', tokenRes);
+          generateKey(keyPair);
           authorize();
         }
       } catch (err) {
@@ -105,6 +111,12 @@ function mapDispatchToProps(dispatch) {
       dispatch({
         type: AUTHORIZE,
         isAuthenticated: true,
+      });
+    },
+    generateKey: (keyPair) => {
+      dispatch({
+        type: GENERATE_KEY,
+        keyPair,
       });
     },
 	};

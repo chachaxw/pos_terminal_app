@@ -42,15 +42,15 @@ export default function(props: Props) {
 
   const submit = async () => {
     const code = this.phone.getCountryCode();
-    const value = this.phone.getValue().replace(`+${code}`, '');
-    const data = {
+    const phone = this.phone.getValue().replace(`+${code}`, '');
+    const verification = {
       api_key: apiKey,
-      phone_number: value,
+      phone_number: phone,
       phone_country: code,
     };
     const params = {
       country_code: code,
-      phone_number: value,
+      phone_number: phone,
       via: 'sms',
     }
 
@@ -97,24 +97,31 @@ export default function(props: Props) {
     try {
       setErrMsg('Registering...');
       setShowAlert(true);
-      const res = await new ApiService().postVerification(data, params);
+
+      const data = {
+        name,
+        email,
+        address,
+        phone,
+      };
+
+      const formData = new FormData();
+      formData.append('display_name', name);
+      formData.append('country_code', code);
+      formData.append('phone_number', phone);
+      formData.append('device_uuid', uuid);
+      formData.append('data', JSON.stringify(data));
+      const res = await new ApiService().postVerification(verification, params);
       setShowAlert(false);
-      console.log(res);
+      // Actions.VerifyCode({
+      //   type: ActionConst.PUSH,
+      //   body: formData,
+      // });
+
       if (res) {
         Actions.VerifyCode({
           type: ActionConst.PUSH,
-          body: {
-            display_name: name,
-            country_code: code,
-            phone_number: value,
-            device_uuid: uuid,
-            data: {
-              name,
-              email,
-              address,
-              phone: value,
-            },
-          },
+          body: formData,
         });
       }
     } catch (err) {

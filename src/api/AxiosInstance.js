@@ -1,6 +1,6 @@
 import axios from 'axios';
 import qs from 'qs';
-import { apiKey, publicKey, baseUrl } from './config';
+import { baseUrl } from './config';
 
 // axios config options
 const options = {

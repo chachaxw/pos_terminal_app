@@ -23,7 +23,7 @@ type Props = {
 function Main(props: Props) {
   const { isAuthenticated } = props;
 
-  if (!isAuthenticated) {
+  if (isAuthenticated) {
     return (
       <Router>
         <Modal hideNavBar>
