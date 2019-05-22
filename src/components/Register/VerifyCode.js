@@ -10,8 +10,9 @@ import Toast from 'react-native-root-toast';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
-import RNSecureKeyStore, { ACCESSIBLE } from "react-native-secure-key-store";
+import RNSecureKeyStore from "react-native-secure-key-store";
 
+import { publicKey } from '../../api/config';
 import { ApiService } from '../../api/ApiService';
 import AxiosInstance from '../../api/AxiosInstance';
 import { AUTHORIZE, GENERATE_KEY } from '../../actions';
@@ -39,27 +40,28 @@ function VerifyCode(props: Props) {
   const checkCode = async (value) => {
     if (value.length === codeLength) {
       const keyPair = nacl.sign.keyPair();
-      AxiosInstance.defaults.headers = {
-        api_ey: keyPair.secretKey,
-        public_key: keyPair.publicKey,
-      };
+      // const result = await storeKey('secret_key', keyPair.publicKey);
+      // AxiosInstance.defaults.headers = {
+      //   api_key: keyPair.secretKey,
+      //   public_key: keyPair.publicKey,
+      // };
 
       body.append('otp_code', value);
   
       try {
-        console.log('Request body', body, keyPair);
+        console.log('Request body', body);
         setLoading(true);
         const res = await new ApiService().postProfile(body);
         setLoading(false);
         console.log('VerifyCode response', res);
   
         if (res) {
-          // const otpRes = await new ApiService().getOtp(body.device_uuid);
+          // const uuid = body.get('device_uuid');
+          // const otpRes = await new ApiService().getOtp(uuid);
           // const pinCode = otpRes.data.pin_code;
           // const data = nacl.sign.open(pinCode, publicKey);
           // const tokenRes = await new ApiService().getToken(body.device_uuid, data);
           // console.log('Request body', tokenRes);
-          generateKey(keyPair);
           authorize();
         }
       } catch (err) {
@@ -122,6 +124,17 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
+async function storeKey(key, value) {
+  // For storing key
+  try {
+    const res = await RNSecureKeyStore.set(key, value);
+    console.log('存储成功', res);
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export default connect(null, mapDispatchToProps)(VerifyCode);
 
 const styles = StyleSheet.create({
@@ -163,6 +176,7 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   cellStyle: {
+    borderWidth: 2,
     borderRadius: 2,
     shadowColor: '#000',
     shadowRadius: 4,
