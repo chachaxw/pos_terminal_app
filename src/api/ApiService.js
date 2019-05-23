@@ -50,7 +50,6 @@ export class ApiService {
     return AxiosInstance.post(apiUrl.profile, data, {
       headers: {
         api_key: apiKey,
-        public_key: publicKey,
         'content-type': 'multipart/form-data',
       },
     });

@@ -111,19 +111,13 @@ export default function(props: Props) {
       formData.append('phone_number', phone);
       formData.append('device_uuid', uuid);
       formData.append('data', JSON.stringify(data));
-      // const res = await new ApiService().postVerification(verification, params);
+      // await new ApiService().postVerification(verification, params);
       setShowAlert(false);
+
       Actions.VerifyCode({
         type: ActionConst.PUSH,
         body: formData,
       });
-
-      // if (res) {
-      //   Actions.VerifyCode({
-      //     type: ActionConst.PUSH,
-      //     body: formData,
-      //   });
-      // }
     } catch (err) {
       setShowAlert(false);
       const res = err.response;

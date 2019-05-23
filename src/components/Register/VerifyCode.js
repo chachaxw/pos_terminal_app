@@ -14,6 +14,7 @@ import RNSecureKeyStore from "react-native-secure-key-store";
 
 import { publicKey } from '../../api/config';
 import { ApiService } from '../../api/ApiService';
+import { decode, encode } from '../../utils/utils';
 import AxiosInstance from '../../api/AxiosInstance';
 import { AUTHORIZE, GENERATE_KEY } from '../../actions';
 
@@ -45,9 +46,10 @@ function VerifyCode(props: Props) {
       //   api_key: keyPair.secretKey,
       //   public_key: keyPair.publicKey,
       // };
+      console.log(keyPair.publicKey, decode(keyPair.publicKey));
 
       body.append('otp_code', value);
-  
+
       try {
         console.log('Request body', body);
         setLoading(true);
@@ -56,12 +58,12 @@ function VerifyCode(props: Props) {
         console.log('VerifyCode response', res);
   
         if (res) {
-          // const uuid = body.get('device_uuid');
-          // const otpRes = await new ApiService().getOtp(uuid);
-          // const pinCode = otpRes.data.pin_code;
-          // const data = nacl.sign.open(pinCode, publicKey);
-          // const tokenRes = await new ApiService().getToken(body.device_uuid, data);
-          // console.log('Request body', tokenRes);
+          const uuid = body.get('device_uuid');
+          const otpRes = await new ApiService().getOtp(uuid);
+          const pinCode = otpRes.data.pin_code;
+          const data = nacl.sign.open(pinCode, publicKey);
+          const tokenRes = await new ApiService().getToken(body.device_uuid, data);
+          console.log('Request body', tokenRes);
           authorize();
         }
       } catch (err) {
