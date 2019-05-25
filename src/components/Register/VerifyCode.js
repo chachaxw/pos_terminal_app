@@ -4,8 +4,10 @@
  */
 
 import nacl from 'tweetnacl';
+import { Buffer } from 'buffer';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import ab2str from 'arraybuffer-to-string';
 import Toast from 'react-native-root-toast';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { View, Text, Image, StyleSheet } from 'react-native';
@@ -46,7 +48,7 @@ function VerifyCode(props: Props) {
       //   api_key: keyPair.secretKey,
       //   public_key: keyPair.publicKey,
       // };
-      console.log(keyPair.publicKey, decode(keyPair.publicKey));
+      console.log(ab2str(new Buffer.from(keyPair.publicKey)));
 
       body.append('otp_code', value);
 
